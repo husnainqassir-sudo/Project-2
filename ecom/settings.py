@@ -17,7 +17,7 @@ SECRET_KEY = 'django-insecure-w+s^o%gbvlkmni1!p)jb)yowz-%=f=wt69jhboxs(^5r62g0=1
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['ecommerce-f4gf.onrender.com']
 
 # Application definition
 
