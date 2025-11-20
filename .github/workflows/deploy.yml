@@ -1,0 +1,43 @@
+name: Django Deploy to Render
+
+on:
+  push:
+    branches: [ main ]       # Trigger on pushes to main branch
+  workflow_dispatch:          # Optional manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run Django migrations
+      - name: Run migrations
+        run: python manage.py migrate
+
+      # Step 5: Collect static files
+      - name: Collect static
+        run: python manage.py collectstatic --noinput
+
+      # Step 6: Deploy to Render
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-d4f3u7je5dus73cbgks0\
+          -H "Authorization: Bearer $RENDER_API_KEY"
